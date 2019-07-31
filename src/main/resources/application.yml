@@ -1,0 +1,8 @@
+server:
+  port: 9001
+
+minio:
+  url: http://10.130.86.37:9000
+  access-key: cloud-service
+  secret-key: cloud-service
+  default-bucket: cloud-service
