@@ -1,5 +1,6 @@
 package com.hlxd.minioserver.config;
 
+import com.google.common.base.Predicates;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,18 +28,20 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                //这里采用包含注解的方式来确定要显示的接口
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
-                //这里采用包扫描的方式来确定要显示的接口
-                //.apis(RequestHandlerSelectors.basePackage("com.hlxd.minioserver.controller"))
-                .paths(PathSelectors.any())
+                // 对所有api进行监控
+                .apis(RequestHandlerSelectors.any())
+                // 不显示错误的接口地址
+                .paths(Predicates.not(PathSelectors.regex("/error.*")))
+                // 对根下所有路径进行监控
+                .paths(PathSelectors.regex("/.*"))
                 .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("minio-server Doc")
-                .description("minio服务端 Api文档")
+                .title("minio服务端 Api文档")
+                .description("minio-server Doc")
                 .contact(new Contact("yulj", "", "1435240630@qq.com"))
                 .version("1.0")
                 .build();

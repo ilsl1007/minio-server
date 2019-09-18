@@ -3,6 +3,7 @@ package com.hlxd.minioserver.controller;
 import com.hlxd.minioserver.service.MinioFileService;
 import com.hlxd.minioserver.util.R;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class MiniFilecontroller {
      * @param fileName
      * @return
      */
-    @ApiOperation(value = "根据fileName删除文件", notes = "根据fileName删除文件")
+    @ApiOperation(value = "根据fileName删除文件", notes = "根据fileName删除文件", response = R.class)
     @DeleteMapping("/{fileName}")
     public R removeByFileName(@PathVariable String fileName) {
         return this.minioFileService.deleteFile(fileName);
@@ -46,7 +47,8 @@ public class MiniFilecontroller {
      * @return R(bucketName, filename)
      */
     @PostMapping("/upload")
-    @ApiOperation(value = "上传文件", notes = "文件上传")
+    @ApiOperation(value = "上传文件", notes = "文件上传", response = R.class)
+    @ApiImplicitParam(name = "file", value = "文件流对象", required = true, dataType = "MultipartFile", allowMultiple = true)
     public R upload(@RequestParam("file") MultipartFile file) {
         return this.minioFileService.uploadFile(file);
     }
